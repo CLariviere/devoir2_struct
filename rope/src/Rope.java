@@ -20,8 +20,16 @@ public class Rope {
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public char charAt(int i) throws IndexOutOfBoundsException{
-        //TODO : à compléter
-        return '\0';
+        Node tmp = root;
+        if (i > tmp.weight)
+        {
+            i -= tmp.weight;
+            return tmp.right.data.charAt(i);
+        }
+        while (i < tmp.weight)
+            tmp = tmp.left;
+        i -= tmp.weight;
+        return tmp.right.data.charAt(i);
     }
 
     //Coupe la Rope en deux à l'index i.
@@ -39,11 +47,15 @@ public class Rope {
     //Ajoute la rope r à la fin de la rope sur laquelle la méthode est appellée.
     //Devrait être en temps O(1)
     public void concat(Rope r){
-        String str = r.toString();
-        Node newNode = new Node(str);
-        Node temp = new Node();
 
-
+        Node nptr = new Node(r.toString());
+        Node newRoot = new Node();
+        newRoot.left = root;
+        newRoot.right = nptr;
+        newRoot.weight = newRoot.left.weight ;
+        if (newRoot.left.right != null)
+            newRoot.weight += newRoot.left.right.weight;
+        root = newRoot;
     }
 
     //Insere la chaine à l'index i (le premier caractère de s sera à l'index i)
@@ -72,7 +84,7 @@ public class Rope {
     //Efface le contenu de la rope.
     //Devrait être en temps O(1).
     public void clear(){
-        //TODO : à compléter
+        root = new Node("");
     }
 
     //Retourne le chaine de caractère aux index [i, j[
