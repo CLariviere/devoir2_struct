@@ -7,35 +7,13 @@
 //           Si vous voulez les faire comme cela, faites-vous des méthodes privées!
 public class Rope {
 
-    //Classe Node.
-    private class Node<T>{
-        Node next;
-        Node prev;
-        T elem;
-
-        public Node(T elem, Node prev, Node next){
-            this.next = next;
-            this.prev = prev;
-            this.elem = elem;
-        }
-    }
 
     //Attributs
-    //Attributs
-    int length;
-    String data;
-    Node parent;
-    Node left;
-    Node right;
-    static int i_current_pos;
-    static int i_last_pos;
+    Node root;
 
     //Constructeur de Rope, construit une Rope initialement vide.
     public Rope(){
-        length=0;
-        parent=null;
-        left=null;
-        right=null;
+        root = new Node();
     }
 
     //Retourne le caractère à l'index i dans la chaine de caractère de la Rope.
@@ -61,7 +39,11 @@ public class Rope {
     //Ajoute la rope r à la fin de la rope sur laquelle la méthode est appellée.
     //Devrait être en temps O(1)
     public void concat(Rope r){
-        //TODO : à compléter
+        String str = r.toString();
+        Node newNode = new Node(str);
+        Node temp = new Node();
+
+
     }
 
     //Insere la chaine à l'index i (le premier caractère de s sera à l'index i)
@@ -105,15 +87,22 @@ public class Rope {
     //Si la rope est vide, retourner "".
     //Devrait être en temps O(n).
     public String toString(){
-        //TODO : à compléter
-        return null;
-    }
+        String chaine="";
+            if (root.data == null) return "";
+            else
+            {
+                chaine = root.data;
+                chaine+=root.left.data;
+                if (root.left.data != null)
+                    chaine+=root.data;
+            }
+            return chaine;
+        }
 
     //Retourne la taille de la chaine contenue dans la rope.
     //Devrait être en temps O(1), mais c'est correct si vous faites O(logn) (lorsque l'arbre est balancé)
     public int length(){
-        //TODO : à compléter
-        return -1;
+        return root.weight;
     }
 
 }
