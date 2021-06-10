@@ -1,5 +1,5 @@
 //Catherine Lariviere 0955948
-//Prénom2 Nom2 Matricule2
+//Dominique Vigeant 20129080
 
 //Une potentielle bonne source à consulter (avec images!): https://en.wikipedia.org/wiki/Rope_(data_structure)
 
@@ -9,7 +9,7 @@ public class Rope {
 
 
     //Attributs
-    Node root;
+    Node root, left, right;
 
     //Constructeur de Rope, construit une Rope initialement vide.
     public Rope(){
@@ -21,15 +21,33 @@ public class Rope {
     //Devrait être en temps O(logn) si l'arbre est balancé
     public char charAt(int i) throws IndexOutOfBoundsException{
         Node tmp = root;
-        if (i > tmp.weight)
-        {
+         
+        if (i>root.weight) throw new IndexOutOfBoundsException();
+ /*       
+        if(i > tmp.weight){
             i -= tmp.weight;
             return tmp.right.data.charAt(i);
         }
-        while (i < tmp.weight)
-            tmp = tmp.left;
+
+        while(i < tmp.weight){
+            tmp =tmp.left;
+        }
         i -= tmp.weight;
-        return tmp.right.data.charAt(i);
+        return tmp.right.data.charAt(i); */
+
+        if (tmp.weight <= i) {
+            i -= tmp.right.weight;
+            tmp=tmp.right;            
+            return charAt(i);
+        }
+        else if (tmp.left.right != null)
+        {
+            tmp=tmp.left;
+            return charAt(i);
+        }
+        else {
+            return tmp.data.charAt(i);
+        } 
     }
 
     //Coupe la Rope en deux à l'index i.
@@ -40,7 +58,13 @@ public class Rope {
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public Rope split(int i) throws IndexOutOfBoundsException{
-        //TODO : à compléter
+        Node tmp = root;
+        Rope resultat = new Rope();
+        
+        if (i>root.weight) throw new IndexOutOfBoundsException();
+
+        
+        
         return null;
     }
 
@@ -95,21 +119,23 @@ public class Rope {
         return null;
     }
 
+
+
+
     //Retourne l'entièreté de la chaine de caractère contenue dans la Rope.
     //Si la rope est vide, retourner "".
     //Devrait être en temps O(n).
     public String toString(){
-        String chaine="";
-            if (root.data == null) return "";
-            else
-            {
-                chaine = root.data;
-                chaine+=root.left.data;
-                if (root.left.data != null)
-                    chaine+=root.data;
-            }
-            return chaine;
-        }
+
+        // Starting at the Rode's root, builds a string by recursively traversing Rope.
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.root.nodeToString());
+        String result = sb.toString();
+        return result;
+            
+    }
+
+
 
     //Retourne la taille de la chaine contenue dans la rope.
     //Devrait être en temps O(1), mais c'est correct si vous faites O(logn) (lorsque l'arbre est balancé)
