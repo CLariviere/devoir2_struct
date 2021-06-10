@@ -1,21 +1,22 @@
 public class Node {
 
-    Node left, right;
+    Node left, right, parent;
     String data;
     int key, weight;
 
     public Node(String data)
     {
         this.data = data;
-        left = null;
+        left = right = parent =null;
         right = null;
+
         weight = key = data.length();
     }
 
     public Node()
     {
         data = null;
-        left = null;
+        left = right = parent = null;
         right = null;
         weight = key = 0;
     }
@@ -33,5 +34,6 @@ public class Node {
 		} else 	{		
 			return this.left.nodeToString() + this.right.nodeToString();
 		}
-	} 
+	}
+
 }
