@@ -9,7 +9,7 @@ public class Node {
         this.data = data;
         left = right = parent =null;
         right = null;
-
+        parent = null;
         weight = key = data.length();
     }
 
@@ -18,22 +18,37 @@ public class Node {
         data = null;
         left = right = parent = null;
         right = null;
+        parent = null;
         weight = key = 0;
     }
 
-         public String nodeToString(){
-		if(this.left == null && this.right == null){
-			if(this.data!=null)
-				return this.data;
-			else
-				return "";
-		} else if(this.left == null){
-			return this.right.nodeToString();
-		} else if(this.right == null){
-			return left.nodeToString();
-		} else 	{		
-			return this.left.nodeToString() + this.right.nodeToString();
-		}
-	}
+    public String nodeToString()
+    {
+        if (this.left == null && this.right == null) {
+          if (this.data!=null)
+            return this.data;
+          else
+            return "";
+        } else if (this.left == null) {
+          return this.right.nodeToString();
+        } else if (this.right == null) {
+          return left.nodeToString();
+        } else {		
+          return this.left.nodeToString() + this.right.nodeToString();
+    }
 
+    public Node nextRight() 
+    {
+        if (this.parent == null){ 		// catches root
+          return null;
+        } else if (this.parent.parent != null && this.parent.parent.right != null){
+          return this.parent.parent.right;
+        // } else if (this.parent.parent == null && this.parent.left == null){
+          // return this.parent.right;
+        // } else if (this.parent.parent == null && this.left != null){
+          // return this.left;
+        } else {
+          return null;
+        }
+    }
 }
