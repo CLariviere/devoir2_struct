@@ -60,7 +60,7 @@ public class Main {
 			corde.insert(6, "mma"); //Draggammalamaha
 			corde.insert(13, "lat");//Draggammalamalatha
 			testEqual(corde, "Draggammalamalatha");
-		}catch (Exception e){
+		} catch (Exception e){
 			System.out.println(e.getMessage());
 		}
 
@@ -297,8 +297,6 @@ public class Main {
 			System.out.println(e.getMessage());
 		}
 
-
-
 		try{
 			System.out.println("\nTest de clear");
 			Rope corde = new Rope();
@@ -391,8 +389,8 @@ public class Main {
 		boolean correct = corde.length() == s.length();
 		System.out.println(correct);
 		if(correct){
-			for(int i = 0; i< s.length(); ++i){
-				if(corde.charAt(i) != s.charAt(i)){
+			for(int i = 0; i < s.length(); ++i){
+				if(corde.charAt(i) != s.charAt(i)) {
 					correct = false;
 					break;
 				}
