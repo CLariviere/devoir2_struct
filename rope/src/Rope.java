@@ -17,11 +17,6 @@ public class Rope {
         root = new Node();
     }
 
-    public Boolean exists(Node n) {
-        if (n != null) return true;
-        else return false;
-    }
-
     static void setChild(Node node, boolean toLeft, Node child){
         if (toLeft) {
             node.left = child;

@@ -35,6 +35,7 @@ public class Node {
           return left.nodeToString();
         } else {		
           return this.left.nodeToString() + this.right.nodeToString();
+        }
     }
 
     public Node nextRight() 
