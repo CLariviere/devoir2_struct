@@ -33,7 +33,8 @@ public class Rope {
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public char charAt(int i) throws IndexOutOfBoundsException{
-        return root.charAt(i);/*
+        return root.charAt(i);
+        /*
         Node tempNode = root;
 
         if (i > root.weight) throw new IndexOutOfBoundsException();
@@ -94,7 +95,7 @@ public class Rope {
             temp.parent=null;
             temp.parent.right=null;
             resultat.concat(orphelin);
-            temp=temp.parent;
+            temp=temp.parent; //TODO reassigner temp plus tot?
         }
         else if (i == 0 && temp.parent.left == temp){
             Rope orphelin = new Rope(temp.parent);
@@ -108,6 +109,7 @@ public class Rope {
             temp = temp.parent;
         }
 
+        //on remonte la rope initiale
         while (temp.parent != null){
             if (temp.parent.right == temp) temp=temp.parent;
             else if (temp.parent.right != null){
