@@ -38,6 +38,28 @@ public class Node {
         }
     }
 
+    public char charAt(int i){
+        if (this.left == null && this.right == null){
+            return data.charAt(i);
+        }
+        if (i > weight) return this.right.charAt(i-weight);
+        else return this.left.charAt(i);
+    }
+
+ /*   public Rope split(int i){
+        Rope resultat= new Rope();
+
+        if (this.left == null && this.right == null){
+            if (this.parent.right == this){
+                return new Rope(this);
+            } else {
+
+            }
+        }
+
+        return resultat;
+    }*/
+
     public Node nextRight() 
     {
         if (this.parent == null){ 		// catches root

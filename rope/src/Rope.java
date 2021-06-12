@@ -17,6 +17,10 @@ public class Rope {
         root = new Node();
     }
 
+    public Rope(Node noeud){
+        root = noeud;
+    }
+
     static void setChild(Node node, boolean toLeft, Node child){
         if (toLeft) {
             node.left = child;
@@ -29,7 +33,9 @@ public class Rope {
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public char charAt(int i) throws IndexOutOfBoundsException{
+        return root.charAt(i);/*
         Node tempNode = root;
+
         if (i > root.weight) throw new IndexOutOfBoundsException();
 
         if (tempNode.weight < i && exists(tempNode.right)) {
@@ -42,7 +48,7 @@ public class Rope {
             tempNode = tempNode.left;
             return charAt(i);
         }
-        return tempNode.data.charAt(i);
+        return tempNode.data.charAt(i);*/
     }
     //Coupe la Rope en deux à l'index i.
     //La première moitiée devrait contenir les caractères aux index [0, i[
@@ -52,54 +58,68 @@ public class Rope {
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public Rope split(int i) throws IndexOutOfBoundsException{
-        if (i > root.weight) throw new IndexOutOfBoundsException();
-        
-        Node tempNode = this.root;
-        Rope secondHalf = new Rope();
-        
 
-        while (tempNode.left != null && tempNode.right != null) {
-            if (i >= tempNode.weight && tempNode.right != null) {
-                i -= tempNode.weight;
-                tempNode = tempNode.right;
-            } else if (i < tempNode.weight && tempNode.left != null){
-                tempNode = tempNode.left;
+        if (i > root.weight) throw new IndexOutOfBoundsException(); //TODO modifier exception
+
+        Rope resultat = new Rope();
+
+        Node temp = root;
+        while (temp.left != null || temp.right != null){
+            if (i <= temp.weight ){
+                //on descend a gauche
+                temp=temp.left;
+            } else {
+                //on descend a droite
+                i -= temp.weight;
+                temp=temp.right;
             }
         }
-        
-        Node startRope = new Node(tempNode.data.substring(i));
-        tempNode.data = tempNode.data.substring(0, i);
-        tempNode.weight = i;
 
-        
-        secondHalf.root = startRope;
-
-        while (tempNode.nextRight() != null) {
-            Node temp = tempNode.nextRight();
-            Rope tempRope = new Rope();
-            tempRope.root = temp;
-            secondHalf.concat(tempRope);
-            tempNode = temp.nextRight();
-            temp.parent = null;
+        //determiner si on est au milieu d'un node
+        if (i != 0 && i != temp.weight){
+            Node gauche = new Node();
+            Node droite = new Node();
+            gauche.parent=droite.parent=temp;
+            gauche.data=temp.data.substring(0, i-1);
+            gauche.weight=gauche.data.length();
+            droite.data=temp.data.substring(i);
+            droite.weight=droite.data.length();
+            temp.weight=gauche.weight;
+            temp=gauche;
         }
-        
-        return secondHalf;   
 
-//         Node temp=root;
-//         Rope resultat = new Rope();
+        //on construit la nouvelle rope
+        if (i == 0 && temp.parent.right == temp){
+            Rope orphelin = new Rope(temp);
+            temp.parent=null;
+            temp.parent.right=null;
+            resultat.concat(orphelin);
+            temp=temp.parent;
+        }
+        else if (i == 0 && temp.parent.left == temp){
+            Rope orphelin = new Rope(temp.parent);
+            resultat.concat(orphelin);
+            Node grandParent=temp.parent.parent;
+            temp.parent=null;
+            temp.parent.left=null;
+            temp = grandParent;
+        }
+        else if (i == temp.weight && temp.parent.right == temp){
+            temp = temp.parent;
+        }
 
-//         if (i>root.weight) throw new IndexOutOfBoundsException();
+        while (temp.parent != null){
+            if (temp.parent.right == temp) temp=temp.parent;
+            else if (temp.parent.right != null){
+                Rope orphelin = new Rope(temp.parent.right);
+                resultat.concat(orphelin);
+                temp = temp.parent;
+            } else {
+                temp=temp.parent;
+            }
+        }
 
-//         if (temp.weight < i && exists(temp.right)) {
-//             i -= temp.weight;
-//             return split(i);
-//         }
-
-//         if (exists(temp.left)) {
-//             concat(resultat);
-//             return split(i);
-//         }
-//         return resultat;
+        return resultat;
     }
 
     //Ajoute la rope r à la fin de la rope sur laquelle la méthode est appellée.
@@ -199,7 +219,7 @@ public class Rope {
     //Retourne la taille de la chaine contenue dans la rope.
     //Devrait être en temps O(1), mais c'est correct si vous faites O(logn) (lorsque l'arbre est balancé)
     public int length(){
-        return root.weight;
+        return root.weight; //TODO revalider le poids
     }
 
     // Fonction maison

@@ -89,7 +89,13 @@ public class Main {
 			System.out.println("\nTest de charAt (2/2)");
 			Rope corde = new Rope();
 			corde.insert(0, "Bonjour");
-			corde.charAt(100);
+			corde.insert(0, "Salut");
+			corde.insert(0, "asfas");
+			corde.insert(0, "vfVFt");
+			corde.insert(0, "EFVW");
+			corde.insert(0, "vfbERe");
+			corde.insert(0, "bEFBGRTHS");
+			corde.charAt(9);
 			System.out.println("false");
 		}catch (IndexOutOfBoundsException e){
 			System.out.println("true");
