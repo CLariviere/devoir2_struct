@@ -11,98 +11,98 @@ public class Main {
 		//Ces tests ne couvrent pas tous les cas de figure possibles. Il pourrait être
 		//judicieux d'en faire plus!
 
-		try{
-			System.out.println("Test du constructeur vide");
-			Rope corde = new Rope();
-			testEqual(corde, "");
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+		// try{
+		// 	System.out.println("Test du constructeur vide");
+		// 	Rope corde = new Rope();
+		// 	testEqual(corde, "");
+		// }catch (Exception e){
+		// 	System.out.println(e.getMessage());
+		// }
 
-		try{
-			System.out.println("\nTest de insert (1/5)");
-			Rope corde = new Rope();
-			corde.insert(0,"Bonjour");
-			testEqual(corde, "Bonjour");
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+		// try{
+		// 	System.out.println("\nTest de insert (1/5)");
+		// 	Rope corde = new Rope();
+		// 	corde.insert(0,"Bonjour");
+		// 	testEqual(corde, "Bonjour");
+		// }catch (Exception e){
+		// 	System.out.println(e.getMessage());
+		// }
 
-		try{
-			System.out.println("\nTest de insert (2/5)");
-			Rope corde = new Rope();
-			String s = "Bonjour";
-			for(int i = 0; i < s.length(); ++i){
-				corde.insert(i, s.charAt(i)+"");
-			}
-			testEqual(corde, s);
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+		// try{
+		// 	System.out.println("\nTest de insert (2/5)");
+		// 	Rope corde = new Rope();
+		// 	String s = "Bonjour";
+		// 	for(int i = 0; i < s.length(); ++i){
+		// 		corde.insert(i, s.charAt(i)+"");
+		// 	}
+		// 	testEqual(corde, s);
+		// }catch (Exception e){
+		// 	System.out.println(e.getMessage());
+		// }
 
-		try{
-			System.out.println("\nTest de insert (3/5)");
-			Rope corde = new Rope();
-			String s = "Bonjour";
-			for(int i = s.length() - 1; i >= 0; --i){
-				corde.insert(0, s.charAt(i)+"");
-			}
-			testEqual(corde, s);
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+		// try{
+		// 	System.out.println("\nTest de insert (3/5)");
+		// 	Rope corde = new Rope();
+		// 	String s = "Bonjour";
+		// 	for(int i = s.length() - 1; i >= 0; --i){
+		// 		corde.insert(0, s.charAt(i)+"");
+		// 	}
+		// 	testEqual(corde, s);
+		// }catch (Exception e){
+		// 	System.out.println(e.getMessage());
+		// }
 
-		try{
-			System.out.println("\nTest de insert (4/5)");
-			Rope corde = new Rope();
-			corde.insert(0, "Dragga"); //Dragga
-			corde.insert(6, "lama"); //Draggalama
-			corde.insert(10, "ha"); //Draggalamaha
-			corde.insert(6, "mma"); //Draggammalamaha
-			corde.insert(13, "lat");//Draggammalamalatha
-			testEqual(corde, "Draggammalamalatha");
-		} catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+		// try{
+		// 	System.out.println("\nTest de insert (4/5)");
+		// 	Rope corde = new Rope();
+		// 	corde.insert(0, "Dragga"); //Dragga
+		// 	corde.insert(6, "lama"); //Draggalama
+		// 	corde.insert(10, "ha"); //Draggalamaha
+		// 	corde.insert(6, "mma"); //Draggammalamaha
+		// 	corde.insert(13, "lat");//Draggammalamalatha
+		// 	testEqual(corde, "Draggammalamalatha");
+		// } catch (Exception e){
+		// 	System.out.println(e.getMessage());
+		// }
 
-		try{
-			System.out.println("\nTest de insert (5/5)");
-			Rope corde = new Rope();
-			corde.insert(0, "Bonjour");
-			corde.insert(100, "Bonjour");
-			System.out.println("false");
-		}catch (IndexOutOfBoundsException e){
-			System.out.println("true");
-		}catch (Exception e){
-			System.out.println("false");
-		}
+		// try{
+		// 	System.out.println("\nTest de insert (5/5)");
+		// 	Rope corde = new Rope();
+		// 	corde.insert(0, "Bonjour");
+		// 	corde.insert(100, "Bonjour");
+		// 	System.out.println("false");
+		// }catch (IndexOutOfBoundsException e){
+		// 	System.out.println("true");
+		// }catch (Exception e){
+		// 	System.out.println("false");
+		// }
 
-		try{
-			System.out.println("\nTest de charAt (1/2)");
-			Rope corde = new Rope();
-			corde.insert(0, "Bonjour");
-			testEqualCharAt(corde, "Bonjour");
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+		// try{
+		// 	System.out.println("\nTest de charAt (1/2)");
+		// 	Rope corde = new Rope();
+		// 	corde.insert(0, "Bonjour");
+		// 	testEqualCharAt(corde, "Bonjour");
+		// }catch (Exception e){
+		// 	System.out.println(e.getMessage());
+		// }
 
-		try{
-			System.out.println("\nTest de charAt (2/2)");
-			Rope corde = new Rope();
-			corde.insert(0, "Bonjour");
-			corde.insert(0, "Salut");
-			corde.insert(0, "asfas");
-			corde.insert(0, "vfVFt");
-			corde.insert(0, "EFVW");
-			corde.insert(0, "vfbERe");
-			corde.insert(0, "bEFBGRTHS");
-			corde.charAt(9);
-			System.out.println("false");
-		}catch (IndexOutOfBoundsException e){
-			System.out.println("true");
-		}catch (Exception e){
-			System.out.println("false");
-		}
+		// try{
+		// 	System.out.println("\nTest de charAt (2/2)");
+		// 	Rope corde = new Rope();
+		// 	corde.insert(0, "Bonjour");
+		// 	corde.insert(0, "Salut");
+		// 	corde.insert(0, "asfas");
+		// 	corde.insert(0, "vfVFt");
+		// 	corde.insert(0, "EFVW");
+		// 	corde.insert(0, "vfbERe");
+		// 	corde.insert(0, "bEFBGRTHS");
+		// 	corde.charAt(9);
+		// 	System.out.println("false");
+		// }catch (IndexOutOfBoundsException e){
+		// 	System.out.println("true");
+		// }catch (Exception e){
+		// 	System.out.println("false");
+		// }
 
 		try{
 			System.out.println("\nTest de split (1/5)");
