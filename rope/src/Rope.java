@@ -89,7 +89,7 @@ public class Rope {
             } else {
                 //on descend a droite
                 i -= temp.weight;
-                temp = temp.right;
+                if(temp.right != null) temp = temp.right;
             }
         }
 
@@ -104,7 +104,9 @@ public class Rope {
             droite.weight = droite.data.length();
             temp.data=null;
             temp.weight   = gauche.weight;
-            temp = gauche;
+            temp.right    = droite;
+            temp.left     = gauche;
+            temp          = gauche;
         }
 
         //on determine a partir de quel noeud on remonte
@@ -121,7 +123,7 @@ public class Rope {
         while (temp.parent != null) {
             if (temp.parent.left == temp){
                 temp = temp.parent;
-                resultat.concat(new Rope(temp.right));
+                if (temp.right != null) resultat.concat(new Rope(temp.right));
                 temp.right = null;
             } else {
                 temp = temp.parent;
@@ -190,11 +192,17 @@ public class Rope {
     //Devrait être en temps O(logn) si l'arbre est balancé
     public void delete(int i, int j) throws IndexOutOfBoundsException {
         if (i < 0 || i > this.length() || j < 0 || i > this.length() || j < i ) throw new IndexOutOfBoundsException();
-        if (i != j) {
 
-            Rope milieu = this.split(i);
-            Rope end = milieu.split(j - i);
-            this.concat(end);
+        if (i != j) {
+            if (i == 0){
+                Rope milieu = this.split(j);
+                this.root = milieu.root;
+            }
+            else {
+                Rope milieu = this.split(i);
+                Rope end = milieu.split(j - i);
+                this.concat(end);
+            }
         }
     }
 
