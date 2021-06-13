@@ -19,6 +19,7 @@ public class Rope {
 
     public Rope(Node noeud){
         root = noeud;
+        root.parent=null;
     }
 
     static void setChild(Node node, boolean toLeft, Node child){
@@ -29,10 +30,33 @@ public class Rope {
         }
     }
 
+    static int poids(Node noeud){
+        Node temp=noeud;
+
+        if (temp.right == null && temp.left == null) return temp.weight;
+        if (temp.left == null && temp.right != null) return 0;
+
+        int poid= 0;
+
+        if (temp.left != null){
+            poid+=noeud.left.weight;
+            temp=temp.left;
+        }
+
+        while (temp.right != null && temp.left != null){
+            poid+=temp.right.weight;
+            temp=temp.right;
+        }
+
+        return poid;
+    }
+
     //Retourne le caractère à l'index i dans la chaine de caractère de la Rope.
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public char charAt(int i) throws IndexOutOfBoundsException{
+
+        if (i > this.toString().length()) throw new IndexOutOfBoundsException();
         return root.charAt(i);
         /*
         Node tempNode = root;
@@ -60,9 +84,21 @@ public class Rope {
     //Devrait être en temps O(logn) si l'arbre est balancé
     public Rope split(int i) throws IndexOutOfBoundsException{
 
-        if (i > root.weight) throw new IndexOutOfBoundsException(); //TODO modifier exception
+        if (i > this.toString().length()) throw new IndexOutOfBoundsException();
+
+
 
         Rope resultat = new Rope();
+
+        if(i == 0){
+            resultat.concat(this);
+            this.clear();
+            return resultat;
+        }
+
+        if(i == this.toString().length()){
+            return resultat;
+        }
 
         Node temp = root;
         while (temp.left != null || temp.right != null){
@@ -81,7 +117,7 @@ public class Rope {
             Node gauche = new Node();
             Node droite = new Node();
             gauche.parent=droite.parent=temp;
-            gauche.data=temp.data.substring(0, i-1);
+            gauche.data=temp.data.substring(0, i);
             gauche.weight=gauche.data.length();
             droite.data=temp.data.substring(i);
             droite.weight=droite.data.length();
@@ -89,38 +125,69 @@ public class Rope {
             temp=gauche;
         }
 
-        //on construit la nouvelle rope
-        if (i == 0 && temp.parent.right == temp){
-            Rope orphelin = new Rope(temp);
+        //on determine a partir de quel noeud on remonte
+        if (i == 0 && temp.parent.right == temp){  //beginning right node
+
+            Rope orphelin =new Rope(temp);
+            temp=temp.parent;
+           /* resultat.concat(orphelin);
+            temp.right = null;*/
+
+/*            Rope orphelin = new Rope(temp);
+            Node temp2=temp.parent;
             temp.parent=null;
             temp.parent.right=null;
             resultat.concat(orphelin);
-            temp=temp.parent; //TODO reassigner temp plus tot?
+            temp=temp2; */
         }
-        else if (i == 0 && temp.parent.left == temp){
+
+        else if (i == 0 && temp.parent.left == temp){ //beginning left node
             Rope orphelin = new Rope(temp.parent);
-            resultat.concat(orphelin);
-            Node grandParent=temp.parent.parent;
-            temp.parent=null;
+//            resultat.concat(orphelin);
+
+            /*Node grandParent=temp.parent.parent;
             temp.parent.left=null;
-            temp = grandParent;
+            temp.parent=null;
+            temp = grandParent;*/
         }
-        else if (i == temp.weight && temp.parent.right == temp){
+        else if (i == temp.weight && temp.parent.right == temp){ //end right node
             temp = temp.parent;
         }
 
         //on remonte la rope initiale
         while (temp.parent != null){
+
+            if (temp.parent.left == temp){
+
+                temp=temp.parent;
+                resultat.concat(new Rope(temp.right));
+                temp.right=null;
+
+            }
+            else if (temp.parent.right == temp){
+                temp=temp.parent;
+            }
+
+        }
+
+/*        while (temp.parent != null){
             if (temp.parent.right == temp) temp=temp.parent;
+
             else if (temp.parent.right != null){
                 Rope orphelin = new Rope(temp.parent.right);
                 resultat.concat(orphelin);
                 temp = temp.parent;
-            } else {
-                temp=temp.parent;
+            } else if (temp.parent.right == null){
+                System.out.println("sibling droit null");
+                break;
             }
-        }
-
+        }*/
+/*        root.weight=this.toString().length();
+        resultat.root.weight=resultat.toString().length();*/
+        System.out.print("vieille " + poids(this.root) + "\n");
+        System.out.print("vieille " + this.toString().length() + "\n");
+        System.out.print("new "+ poids(resultat.root) + "\n");
+        System.out.print("new "+ resultat.toString().length() + "\n");
         return resultat;
     }
 
@@ -131,6 +198,7 @@ public class Rope {
         newRoot.left = root;
         newRoot.right = r.root;
         newRoot.weight = newRoot.right.weight + newRoot.left.weight;
+        //System.out.print(newRoot.weight + "\n");
         root.parent = newRoot;
         r.root.parent = newRoot;
         root = newRoot;
@@ -141,10 +209,26 @@ public class Rope {
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public void insert(int i, String s) throws IndexOutOfBoundsException {
-        if (i > root.weight) throw new IndexOutOfBoundsException();
 
-        Rope ropeToInsert = new Rope();
-        ropeToInsert.root = new Node(s);
+        if (i > this.toString().length()) throw new IndexOutOfBoundsException();
+
+        Rope milieu = new Rope();
+        milieu.root = new Node(s);
+
+        if (i == 0 && root.weight == 0) {
+            root = new Node(s);
+        } else if (i == 0) {
+            milieu.concat(this);
+            this.root = milieu.root;
+        } else if (i == this.root.weight) {
+            this.concat(milieu);
+        } else {
+            Rope droite=this.split(i);
+            this.concat(milieu);
+            this.concat(droite);
+        }
+
+/*
 
         if (i == 0 && root.weight == 0) {
             root = new Node(s);
@@ -158,6 +242,7 @@ public class Rope {
             this.concat(ropeToInsert);
             this.concat(endOfThisRope);
         }
+*/
 
 //         if (i == 0 && root.weight == 0) {
 //             root = new Node(s);
@@ -178,11 +263,11 @@ public class Rope {
     //Si i et/ou j ne sont pas des index valides, ou que i > j, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public void delete(int i, int j) throws IndexOutOfBoundsException {
-        if (i > root.weight || j > root.weight || i > j) throw new IndexOutOfBoundsException();
+        /*if (i > root.weight || j > root.weight || i > j) throw new IndexOutOfBoundsException();
         Rope secondHalf = this.split(i);
         Rope end = secondHalf.split(j - i);
         this.concat(end);
-        //TODO : à compléter
+        //TODO : à compléter*/
     }
 
     //Méthode pour rebalancer l'arbre. Ne l'appellez pas avec vos autres méthodes.
@@ -195,13 +280,16 @@ public class Rope {
     //Efface le contenu de la rope.
     //Devrait être en temps O(1).
     public void clear(){
-        root = new Node("");
+        this.root = new Node("");
     }
 
     //Retourne le chaine de caractère aux index [i, j[
     //Si i et/ou j ne sont pas des index valides, ou que i > j, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(n).
     public String substring(int i, int j) throws IndexOutOfBoundsException{
+
+        if (i > j){ throw new IndexOutOfBoundsException();}
+
         //TODO : à compléter
         return null;
     }

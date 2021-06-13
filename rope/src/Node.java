@@ -2,7 +2,7 @@ public class Node {
 
     Node left, right, parent;
     String data;
-    int key, weight;
+    int weight;
 
     public Node(String data)
     {
@@ -10,7 +10,7 @@ public class Node {
         left = right = parent =null;
         right = null;
         parent = null;
-        weight = key = data.length();
+        weight = data.length();
     }
 
     public Node()
@@ -19,7 +19,7 @@ public class Node {
         left = right = parent = null;
         right = null;
         parent = null;
-        weight = key = 0;
+        weight = 0;
     }
 
     public String nodeToString()
