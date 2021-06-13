@@ -13,7 +13,7 @@ public class Rope {
 
 
     //Attributs
-    Node root, left, right;
+    Node root;
 
     //Constructeur de Rope, construit une Rope initialement vide.
     public Rope(){
@@ -25,18 +25,17 @@ public class Rope {
         root.parent = null;
     }
 
+    //calcul du poids d'un noeud (poids du sous-arbre de gauche)
     static int getWeight(Node noeud){
         Node temp = noeud;
 
         if (temp.right == null && temp.left == null) return temp.data.length();
-        if (temp.left == null && temp.right != null) return 0;
+        if (temp.left == null) return 0;
 
         int poids = 0;
 
-        if (temp.left != null) {
-            poids += temp.left.weight;
-            temp = temp.left;
-        }
+        poids += temp.left.weight;
+        temp = temp.left;
         while (temp.right != null) {
             poids += temp.right.weight;
             temp = temp.right;
@@ -66,6 +65,7 @@ public class Rope {
         Rope resultat = new Rope();
         Node temp = this.root;
 
+        //cas limite si i est au début ou a la fin de la string
         if (i == 0) {
             resultat.concat(this);
             this.clear();
@@ -74,7 +74,8 @@ public class Rope {
             resultat.root = new Node("");
             return resultat;
         }
-        
+
+        //on descend jusqu'à une feuille
         while (temp.left != null || temp.right != null) {
             if (i <= temp.weight ) {
                 //on descend a gauche
@@ -87,6 +88,8 @@ public class Rope {
         }
 
         //determiner si on est au milieu d'un node
+        //si oui on le coupe en deux, et le noeud devient
+        //le parent des deux nouveaux noeuds
         if (i != 0 && i != temp.data.length()){
             Node gauche = new Node();
             Node droite = new Node();
@@ -103,16 +106,14 @@ public class Rope {
         }
 
         //on determine a partir de quel noeud on remonte
-        if (i == 0 && temp.parent.right == temp) {  //beginning of right node
-
+        if (i == 0 && temp.parent.right == temp) { //beginning of right node
             temp = temp.parent;
-        } else if (i == 0 && temp.parent.left == temp){ //beginning of left node
-
-        } else if (i == temp.weight && temp.parent.right == temp) { //end of right node
+        }else if (i == temp.weight && temp.parent.right == temp) { //end of right node
             temp = temp.parent;
         }
 
         //on remonte la rope initiale
+        //on concat les noeuds a la rope resultat
         while (temp.parent != null) {
             if (temp.parent.left == temp){
                 temp = temp.parent;
@@ -136,20 +137,23 @@ public class Rope {
     //Ajoute la rope r à la fin de la rope sur laquelle la méthode est appellée.
     //Devrait être en temps O(1)
     public void concat(Rope r) {
+
         Node newRoot = new Node();
         newRoot.left = this.root;
         newRoot.right = r.root;
+
         if (this.root.weight == 0) {
             this.root = r.root;
         } else {
-        if (newRoot.left.left == null && newRoot.left.right == null) {
-            newRoot.weight = newRoot.left.weight;
-        } else {
-            newRoot.weight = getWeight(newRoot);
-        }
-        this.root.parent = newRoot;
-        r.root.parent = newRoot;
-        this.root = newRoot;
+            if (newRoot.left.left == null && newRoot.left.right == null) {
+                newRoot.weight = newRoot.left.weight;
+            } else {
+                newRoot.weight = getWeight(newRoot);
+            }
+
+            this.root.parent = newRoot;
+            r.root.parent = newRoot;
+            this.root = newRoot;
         }
     }
 
@@ -172,6 +176,7 @@ public class Rope {
         } else if (i == this.toString().length()) {
             this.concat(milieu);
         } else {
+            //on doit insérer au milieu de la string
             Rope droite = this.split(i);
             this.concat(milieu);
             this.concat(droite);
@@ -191,6 +196,7 @@ public class Rope {
                 this.root = milieu.root;
             }
             else {
+                //on supprime au milieu de la string
                 Rope milieu = this.split(i);
                 Rope end = milieu.split(j - i);
                 this.concat(end);
@@ -203,17 +209,13 @@ public class Rope {
     //Devrait être en O(n)
     public void rebalance(){
 
-        Vector<Node> nodes = new Vector<Node>();
-        storeBSTNodes(root, nodes);
+        Vector<Node> nodes = new Vector<>();
+        storeNoeud(root, nodes);
         int n = nodes.size();
 
+        //on reconstruit l'arbre noeud par noeud
         this.root=buildTreeUtil(nodes, 0, n - 1);
 
-        /*Rope temp = new Rope();
-        temp.concat(new Rope(buildTreeUtil(nodes, 0, n - 1)));
-        this.clear();
-        this.concat(temp);*/
-        //this.root.weight=getWeight(root);
     }
 
     //Efface le contenu de la rope.
@@ -239,11 +241,8 @@ public class Rope {
     //Devrait être en temps O(n).
     public String toString(){
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.root.nodeToString());
-        String result = sb.toString();
-        return result;
-            
+        return this.root.nodeToString();
+
     }
 
     //Retourne la taille de la chaine contenue dans la rope.
@@ -262,34 +261,27 @@ public class Rope {
 
     }
 
-    // Fonction maison
-    public Boolean exists(Node n) {
-        if (n != null) return true;
-        else return false;
-    }
-
-    void storeBSTNodes(Node root, Vector<Node> nodes)
+    void storeNoeud(Node root, Vector<Node> nodes)
     {
-        // Base case
+        // cas de base
         if (root == null)
             return;
 
-        // Store nodes in Inorder (which is sorted
-        // order for BST)
-        storeBSTNodes(root.left, nodes);
+        // Store les noeuds dans l'ordre
+        storeNoeud(root.left, nodes);
         nodes.add(root);
-        storeBSTNodes(root.right, nodes);
+        storeNoeud(root.right, nodes);
     }
 
-    /* Recursive function to construct binary tree */
+    //on construit l'arbre de manière récursive
     Node buildTreeUtil(Vector<Node> nodes, int start,
                        int end)
     {
-        // base case
+        // cas de base
         if (start > end)
             return null;
 
-        /* Get the middle element and make it root */
+        //le noeud du milieu devient la racine
         int mid = (start + end) / 2;
         Node node = nodes.get(mid);
         if (node.data == null){
@@ -298,8 +290,7 @@ public class Rope {
             node.weight=node.data.length();
         }
 
-        /* Using index in Inorder traversal, construct
-           left and right subtress */
+        //on construit les sous-arbres de gauche et de droite
         node.left = buildTreeUtil(nodes, start, mid - 1);
         node.right = buildTreeUtil(nodes, mid + 1, end);
 
