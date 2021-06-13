@@ -1,6 +1,7 @@
 //Catherine Lariviere 0955948
 //Dominique Vigeant 20129080
 //source: https://github.com/harymitchell/JavaRope/blob/master/Rope.java
+//source: https://www.geeksforgeeks.org/convert-normal-bst-balanced-bst/
 
 //Une potentielle bonne source à consulter (avec images!): https://en.wikipedia.org/wiki/Rope_(data_structure)
 
@@ -58,23 +59,6 @@ public class Rope {
 
         if (i > this.toString().length()) throw new IndexOutOfBoundsException();
         return root.charAt(i);
-/*
-        Node tempNode = root;
-
-        if (i > root.weight) throw new IndexOutOfBoundsException();
-
-        if (tempNode.weight < i && exists(tempNode.right)) {
-            i -= tempNode.weight;
-            tempNode = tempNode.right;
-            return charAt(i);
-        }
-
-        if (exists(tempNode.left)) {
-            tempNode = tempNode.left;
-            return charAt(i);
-        }
-        return tempNode.data.charAt(i);
-*/
     }
 
     //Coupe la Rope en deux à l'index i.
@@ -118,6 +102,7 @@ public class Rope {
             gauche.weight = gauche.data.length();
             droite.data   = temp.data.substring(i);
             droite.weight = droite.data.length();
+            temp.data=null;
             temp.weight   = gauche.weight;
             temp = gauche;
         }
@@ -204,30 +189,29 @@ public class Rope {
     //Si i et/ou j ne sont pas des index valides, ou que i > j, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public void delete(int i, int j) throws IndexOutOfBoundsException {
-        if (i > this.length() || j > this.length() || i > j) throw new IndexOutOfBoundsException();
+        if (i < 0 || i > this.length() || j < 0 || i > this.length() || j < i ) throw new IndexOutOfBoundsException();
         if (i != j) {
+
             Rope milieu = this.split(i);
             Rope end = milieu.split(j - i);
             this.concat(end);
         }
-        //TODO : à compléter
     }
 
     //Méthode pour rebalancer l'arbre. Ne l'appellez pas avec vos autres méthodes.
     //Nous supposerons qu'elle sera appeller uniquement de l'exterieur.
     //Devrait être en O(n)
     public void rebalance(){
-        // Store nodes of given BST in sorted order
+
         Vector<Node> nodes = new Vector<Node>();
         storeBSTNodes(root, nodes);
-
-        // Constucts BST from nodes[]
         int n = nodes.size();
 
         Rope temp = new Rope();
         temp.concat(new Rope(buildTreeUtil(nodes, 0, n - 1)));
         this.clear();
         this.concat(temp);
+        this.root.weight=getWeight(root);
     }
 
     //Efface le contenu de la rope.
@@ -243,7 +227,7 @@ public class Rope {
 
         if (i > j) throw new IndexOutOfBoundsException();
 
-        if (i < 0 || i > this.length() || j < 0 || i > this.length() ) throw new IndexOutOfBoundsException();
+        if (i < 0 || i > this.length() || j < 0 || i > this.length() || j < i ) throw new IndexOutOfBoundsException();
 
         return this.toString().substring(i,j);
     }
@@ -263,14 +247,16 @@ public class Rope {
     //Retourne la taille de la chaine contenue dans la rope.
     //Devrait être en temps O(1), mais c'est correct si vous faites O(logn) (lorsque l'arbre est balancé)
     public int length(){
-        Node temp = this.root;
+        /*Node temp = this.root;
         int poids = temp.weight;
         while (temp.right != null) {
             temp = temp.right;
             poids += temp.weight;
         }
-        return poids;
-        // return root.weight; //TODO revalider le getWeight
+        return poids;*/
+
+        return this.toString().length();
+
     }
 
     // Fonction maison
@@ -278,7 +264,6 @@ public class Rope {
         if (n != null) return true;
         else return false;
     }
-
     void storeBSTNodes(Node root, Vector<Node> nodes)
     {
         // Base case
@@ -311,5 +296,7 @@ public class Rope {
 
         return node;
     }
+
+
 
 }

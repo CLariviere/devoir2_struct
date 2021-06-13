@@ -119,11 +119,11 @@ public class Main {
 		try{
 			System.out.println("\nTest de split (2/5)");
 			Rope corde1 = new Rope();
-			corde1.insert(0, "Dragga"); //Dragga
-			corde1.insert(6, "lama"); //Draggalama
-			corde1.insert(10, "ha"); //Draggalamaha
-			corde1.insert(6, "mma"); //Draggammalamaha
- 			corde1.insert(13, "lat");//Draggammalamalatha
+			corde1.insert(0, "abcdef"); //Dragga
+			corde1.insert(6, "ghij"); //Draggalama
+			corde1.insert(10, "kl"); //Draggalamaha
+			corde1.insert(6, "mno"); //Draggammalamaha
+ 			corde1.insert(13, "pqr");//Draggammalamalatha
 			Rope corde2 = corde1.split(8);
 			testEqual(corde1, "Draggamm");
 			testEqual(corde2, "alamalatha");
