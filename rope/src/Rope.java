@@ -4,6 +4,8 @@
 
 //Une potentielle bonne source à consulter (avec images!): https://en.wikipedia.org/wiki/Rope_(data_structure)
 
+import java.util.Vector;
+
 //Remarque : Certaines méthodes sont beaucoup plus faciles à implémenter récursivement.
 //           Si vous voulez les faire comme cela, faites-vous des méthodes privées!
 public class Rope {
@@ -215,7 +217,17 @@ public class Rope {
     //Nous supposerons qu'elle sera appeller uniquement de l'exterieur.
     //Devrait être en O(n)
     public void rebalance(){
-        //TODO : à compléter
+        // Store nodes of given BST in sorted order
+        Vector<Node> nodes = new Vector<Node>();
+        storeBSTNodes(root, nodes);
+
+        // Constucts BST from nodes[]
+        int n = nodes.size();
+
+        Rope temp = new Rope();
+        temp.concat(new Rope(buildTreeUtil(nodes, 0, n - 1)));
+        this.clear();
+        this.concat(temp);
     }
 
     //Efface le contenu de la rope.
@@ -229,10 +241,11 @@ public class Rope {
     //Devrait être en temps O(n).
     public String substring(int i, int j) throws IndexOutOfBoundsException{
 
-        if (i > j) { throw new IndexOutOfBoundsException();}
+        if (i > j) throw new IndexOutOfBoundsException();
 
-        //TODO : à compléter
-        return null;
+        if (i < 0 || i > this.length() || j < 0 || i > this.length() ) throw new IndexOutOfBoundsException();
+
+        return this.toString().substring(i,j);
     }
 
     //Retourne l'entièreté de la chaine de caractère contenue dans la Rope.
@@ -264,6 +277,39 @@ public class Rope {
     public Boolean exists(Node n) {
         if (n != null) return true;
         else return false;
+    }
+
+    void storeBSTNodes(Node root, Vector<Node> nodes)
+    {
+        // Base case
+        if (root == null)
+            return;
+
+        // Store nodes in Inorder (which is sorted
+        // order for BST)
+        storeBSTNodes(root.left, nodes);
+        nodes.add(root);
+        storeBSTNodes(root.right, nodes);
+    }
+
+    /* Recursive function to construct binary tree */
+    Node buildTreeUtil(Vector<Node> nodes, int start,
+                       int end)
+    {
+        // base case
+        if (start > end)
+            return null;
+
+        /* Get the middle element and make it root */
+        int mid = (start + end) / 2;
+        Node node = nodes.get(mid);
+
+        /* Using index in Inorder traversal, construct
+           left and right subtress */
+        node.left = buildTreeUtil(nodes, start, mid - 1);
+        node.right = buildTreeUtil(nodes, mid + 1, end);
+
+        return node;
     }
 
 }
