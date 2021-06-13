@@ -127,8 +127,13 @@ public class Rope {
                 if (temp.right != null) resultat.concat(new Rope(temp.right));
                 temp.right = null;
                 temp.weight = temp.left.weight;
-                temp.left.parent = temp.parent;
-                temp.parent.left = temp.left;
+
+                if (temp.left.data == null && temp.left.right == null){
+                    temp.left = temp.left.left;
+                    temp.left.parent=temp;
+                }
+/*                temp.left.parent = temp.parent;
+                temp.parent.left = temp.left;*/
             } else {
                 temp = temp.parent;
             }
