@@ -104,6 +104,8 @@ public class Rope {
             droite.weight = droite.data.length();
             temp.data=null;
             temp.weight   = gauche.weight;
+            temp.right = droite;
+            temp.left = gauche;
             temp = gauche;
         }
 
