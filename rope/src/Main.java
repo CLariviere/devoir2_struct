@@ -10,6 +10,7 @@ public class Main {
 		//Ces tests supposent que les méthodes toString et length ont bien été implémentées
 		//Ces tests ne couvrent pas tous les cas de figure possibles. Il pourrait être
 		//judicieux d'en faire plus!
+
 		try{
 			System.out.println("Test du constructeur vide");
 			Rope corde = new Rope();
@@ -115,33 +116,17 @@ public class Main {
 			System.out.println(e.getMessage());
 		}
 
-		/*try{
-			System.out.println("\nTest de split (2/5)");
-			Rope corde1 = new Rope();
-			corde1.insert(0, "Dragga"); //Dragga
-			corde1.insert(6, "lama"); //Draggalama
-			corde1.insert(10, "ha"); //Draggalamaha
-			corde1.insert(6, "mma"); //Draggammalamaha
-			corde1.insert(13, "lat");//Draggammalamalatha
-			System.out.print("hello world");
-			Rope corde2 = corde1.split(8);
-			testEqual(corde1, "Draggamm");
-			testEqual(corde2, "alamalatha");
-		}catch (Exception e){
-			System.out.println(e.getMessage());
-		}*/
 		try{
 			System.out.println("\nTest de split (2/5)");
 			Rope corde1 = new Rope();
 			corde1.insert(0, "Dragga"); //Dragga
 			corde1.insert(6, "lama"); //Draggalama
 			corde1.insert(10, "ha"); //Draggalamaha
-/*			corde1.insert(6, "mma"); //Draggammalamaha
-			corde1.insert(13, "lat");//Draggammalamalatha*/
-			System.out.print("hello world");
-			Rope corde2 = corde1.split(7);
-			testEqual(corde1, "Draggal");
-			testEqual(corde2, "amaha");
+			corde1.insert(6, "mma"); //Draggammalamaha
+ 			corde1.insert(13, "lat");//Draggammalamalatha
+			Rope corde2 = corde1.split(8);
+			testEqual(corde1, "Draggamm");
+			testEqual(corde2, "alamalatha");
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}
@@ -403,7 +388,6 @@ public class Main {
 	}
 
 	public static void testEqual(Rope corde, String s){
-		System.out.println(corde.toString());
 		System.out.println(corde.length() == s.length());
 		System.out.println(corde.toString().equals(s));
 	}

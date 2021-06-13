@@ -22,17 +22,14 @@ public class Node {
         weight = 0;
     }
 
-    public String nodeToString()
-    {
+    public String nodeToString() {
         if (this.left == null && this.right == null) {
-          if (this.data!=null)
-            return this.data;
-          else
-            return "";
+          if (this.data!=null) return this.data;
+          else return "";
         } else if (this.left == null) {
           return this.right.nodeToString();
         } else if (this.right == null) {
-          return left.nodeToString();
+          return this.left.nodeToString();
         } else {		
           return this.left.nodeToString() + this.right.nodeToString();
         }
@@ -45,20 +42,6 @@ public class Node {
         if (i > weight) return this.right.charAt(i-weight);
         else return this.left.charAt(i);
     }
-
- /*   public Rope split(int i){
-        Rope resultat= new Rope();
-
-        if (this.left == null && this.right == null){
-            if (this.parent.right == this){
-                return new Rope(this);
-            } else {
-
-            }
-        }
-
-        return resultat;
-    }*/
 
     public Node nextRight() 
     {
