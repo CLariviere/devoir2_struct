@@ -36,7 +36,7 @@ public class Rope {
     static int getWeight(Node noeud){
         Node temp = noeud;
 
-        if (temp.right == null && temp.left == null) return temp.weight;
+        if (temp.right == null && temp.left == null) return temp.data.length();
         if (temp.left == null && temp.right != null) return 0;
 
         int poids = 0;
@@ -79,6 +79,7 @@ public class Rope {
             this.clear();
             return resultat;
         } else if (i == this.length()) {
+            resultat.root = new Node("");
             return resultat;
         }
         
@@ -125,6 +126,9 @@ public class Rope {
                 temp = temp.parent;
                 if (temp.right != null) resultat.concat(new Rope(temp.right));
                 temp.right = null;
+                temp.weight = temp.left.weight;
+                temp.left.parent = temp.parent;
+                temp.parent.left = temp.left;
             } else {
                 temp = temp.parent;
             }
@@ -272,6 +276,7 @@ public class Rope {
         if (n != null) return true;
         else return false;
     }
+
     void storeBSTNodes(Node root, Vector<Node> nodes)
     {
         // Base case
@@ -304,7 +309,4 @@ public class Rope {
 
         return node;
     }
-
-
-
 }
