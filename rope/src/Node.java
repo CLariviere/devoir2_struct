@@ -4,8 +4,7 @@ public class Node {
     String data;
     int weight;
 
-    public Node(String data)
-    {
+    public Node(String data) {
         this.data = data;
         left = right = parent =null;
         right = null;
@@ -13,8 +12,7 @@ public class Node {
         weight = data.length();
     }
 
-    public Node()
-    {
+    public Node() {
         data = null;
         left = right = parent = null;
         right = null;
@@ -41,20 +39,5 @@ public class Node {
         }
         if (i > weight) return this.right.charAt(i-weight);
         else return this.left.charAt(i);
-    }
-
-    public Node nextRight() 
-    {
-        if (this.parent == null){ 		// catches root
-          return null;
-        } else if (this.parent.parent != null && this.parent.parent.right != null){
-          return this.parent.parent.right;
-        // } else if (this.parent.parent == null && this.parent.left == null){
-          // return this.parent.right;
-        // } else if (this.parent.parent == null && this.left != null){
-          // return this.left;
-        } else {
-          return null;
-        }
     }
 }

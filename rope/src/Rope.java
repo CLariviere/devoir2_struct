@@ -25,14 +25,6 @@ public class Rope {
         root.parent = null;
     }
 
-    static void setChild(Node node, boolean toLeft, Node child){
-        if (toLeft) {
-            node.left = child;
-        } else {
-            node.right = child;
-        }
-    }
-
     static int getWeight(Node noeud){
         Node temp = noeud;
 
@@ -112,10 +104,10 @@ public class Rope {
 
         //on determine a partir de quel noeud on remonte
         if (i == 0 && temp.parent.right == temp) {  //beginning of right node
-            Rope orphelin = new Rope(temp);
+
             temp = temp.parent;
         } else if (i == 0 && temp.parent.left == temp){ //beginning of left node
-            Rope orphelin = new Rope(temp.parent);
+
         } else if (i == temp.weight && temp.parent.right == temp) { //end of right node
             temp = temp.parent;
         }
@@ -132,8 +124,6 @@ public class Rope {
                     temp.left = temp.left.left;
                     temp.left.parent=temp;
                 }
-/*                temp.left.parent = temp.parent;
-                temp.parent.left = temp.left;*/
             } else {
                 temp = temp.parent;
             }
@@ -155,13 +145,6 @@ public class Rope {
         if (newRoot.left.left == null && newRoot.left.right == null) {
             newRoot.weight = newRoot.left.weight;
         } else {
-            // Node temp = newRoot.left;
-            // int poids = temp.weight;
-            // while (temp.right != null) {
-            //     temp = temp.right;
-            //     poids += temp.weight;
-            // }
-            // newRoot.weight = poids;
             newRoot.weight = getWeight(newRoot);
         }
         this.root.parent = newRoot;
@@ -224,11 +207,13 @@ public class Rope {
         storeBSTNodes(root, nodes);
         int n = nodes.size();
 
-        Rope temp = new Rope();
+        this.root=buildTreeUtil(nodes, 0, n - 1);
+
+        /*Rope temp = new Rope();
         temp.concat(new Rope(buildTreeUtil(nodes, 0, n - 1)));
         this.clear();
-        this.concat(temp);
-        this.root.weight=getWeight(root);
+        this.concat(temp);*/
+        //this.root.weight=getWeight(root);
     }
 
     //Efface le contenu de la rope.
@@ -264,15 +249,16 @@ public class Rope {
     //Retourne la taille de la chaine contenue dans la rope.
     //Devrait être en temps O(1), mais c'est correct si vous faites O(logn) (lorsque l'arbre est balancé)
     public int length(){
-        /*Node temp = this.root;
+
+        Node temp = this.root;
         int poids = temp.weight;
         while (temp.right != null) {
             temp = temp.right;
             poids += temp.weight;
         }
-        return poids;*/
+        return poids;
 
-        return this.toString().length();
+        //return this.toString().length();
 
     }
 
@@ -306,6 +292,11 @@ public class Rope {
         /* Get the middle element and make it root */
         int mid = (start + end) / 2;
         Node node = nodes.get(mid);
+        if (node.data == null){
+            node.weight = 0;
+        } else {
+            node.weight=node.data.length();
+        }
 
         /* Using index in Inorder traversal, construct
            left and right subtress */
