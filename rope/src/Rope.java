@@ -47,7 +47,6 @@ public class Rope {
     //Si i n'est pas un index valide, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public char charAt(int i) throws IndexOutOfBoundsException{
-
         if (i > this.toString().length()) throw new IndexOutOfBoundsException();
         return root.charAt(i);
     }
@@ -188,7 +187,7 @@ public class Rope {
     //Si i et/ou j ne sont pas des index valides, ou que i > j, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(logn) si l'arbre est balancé
     public void delete(int i, int j) throws IndexOutOfBoundsException {
-        if (i < 0 || i > this.length() || j < 0 || i > this.length() || j < i ) throw new IndexOutOfBoundsException();
+        if (i < 0 || i > this.length() || j < 0 || j > this.length() || j < i ) throw new IndexOutOfBoundsException();
 
         if (i != j) {
             if (i == 0){
