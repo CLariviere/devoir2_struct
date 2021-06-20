@@ -1,3 +1,6 @@
+//Catherine Lariviere 0955948
+//Dominique Vigeant 20129080
+
 public class Node {
 
     Node left, right, parent;
