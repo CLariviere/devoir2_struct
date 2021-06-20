@@ -214,7 +214,7 @@ public class Main {
 			testEqual(corde1, "");
 		}catch (Exception e){
 			System.out.println(e.getMessage());
-		}
+		} 
 
 		try{
 			System.out.println("\nTest de delete (1/6)");
@@ -225,7 +225,7 @@ public class Main {
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}
-
+		
 		try{
 			System.out.println("\nTest de delete (2/6)");
 			Rope corde = new Rope();
@@ -235,7 +235,7 @@ public class Main {
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}
-
+		
 		try{
 			System.out.println("\nTest de delete (3/6)");
 			Rope corde = new Rope();
@@ -290,17 +290,18 @@ public class Main {
 		}catch (Exception e){
 			System.out.println("false");
 		}
+		
 
 		try{
 			System.out.println("\nTest de rebalance");
 			Rope corde = new Rope();
-			String s = "Bonjour";
+			String s = "Draggammalamalatha birbouchel Ostrumaplivi tigaudô umô transi Li";
 			for(int i = 0; i < s.length(); ++i){
 				corde.insert(i, s.charAt(i)+"");
 			}
 			corde.rebalance();
 			testEqual(corde, s);
-		}catch (Exception e){
+		} catch (Exception e){
 			System.out.println(e.getMessage());
 		}
 
@@ -317,7 +318,7 @@ public class Main {
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}
-
+		
 		try{
 			System.out.println("\nTest de substring (1/6)");
 			Rope corde = new Rope();
@@ -326,7 +327,7 @@ public class Main {
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}
-
+		
 		try{
 			System.out.println("\nTest de substring (2/6)");
 			Rope corde = new Rope();
@@ -372,7 +373,7 @@ public class Main {
 		}catch (Exception e){
 			System.out.println("false");
 		}
-
+		
 		try{
 			System.out.println("\nTest de substring (6/6)");
 			Rope corde = new Rope();

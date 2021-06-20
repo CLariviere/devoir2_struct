@@ -5,7 +5,7 @@
 
 //Une potentielle bonne source à consulter (avec images!): https://en.wikipedia.org/wiki/Rope_(data_structure)
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 //Remarque : Certaines méthodes sont beaucoup plus faciles à implémenter récursivement.
 //           Si vous voulez les faire comme cela, faites-vous des méthodes privées!
@@ -98,7 +98,7 @@ public class Rope {
             gauche.weight = gauche.data.length();
             droite.data   = temp.data.substring(i);
             droite.weight = droite.data.length();
-            temp.data=null;
+            temp.data     = null;
             temp.weight   = gauche.weight;
             temp.right    = droite;
             temp.left     = gauche;
@@ -207,22 +207,10 @@ public class Rope {
     //Méthode pour rebalancer l'arbre. Ne l'appellez pas avec vos autres méthodes.
     //Nous supposerons qu'elle sera appeller uniquement de l'exterieur.
     //Devrait être en O(n)
-    public void rebalance(){
-
-        Vector<Node> nodes = new Vector<>();
+    public void rebalance() {
+        ArrayList<Node> nodes = new ArrayList<>();
         storeNoeud(root, nodes);
-        //nodes.add(nodes.size(),new Node());
-        int n = nodes.size();
-
-
-        for(Node obj : nodes)
-        {
-            System.out.println("Data: "+obj.data + " Weight: " + obj.weight);
-        }
-
-        //on reconstruit l'arbre noeud par noeud
-        this.root=buildTreeUtil(nodes, 0, n-1);
-
+        this.root = buildBalandedRope(nodes);
     }
 
     //Efface le contenu de la rope.
@@ -235,10 +223,7 @@ public class Rope {
     //Si i et/ou j ne sont pas des index valides, ou que i > j, lancer un IndexOutOfBoundsException.
     //Devrait être en temps O(n).
     public String substring(int i, int j) throws IndexOutOfBoundsException{
-
-        if (i > j) throw new IndexOutOfBoundsException();
-
-        if (i < 0 || i > this.length() || j < 0 || i > this.length() || j < i ) throw new IndexOutOfBoundsException();
+        if (i < 0 || i > this.length() || j < 0 || j > this.length() || j < i ) throw new IndexOutOfBoundsException();
 
         return this.toString().substring(i,j);
     }
@@ -247,15 +232,12 @@ public class Rope {
     //Si la rope est vide, retourner "".
     //Devrait être en temps O(n).
     public String toString(){
-
         return this.root.nodeToString();
-
     }
 
     //Retourne la taille de la chaine contenue dans la rope.
     //Devrait être en temps O(1), mais c'est correct si vous faites O(logn) (lorsque l'arbre est balancé)
     public int length(){
-
         Node temp = this.root;
         int poids = temp.weight;
         while (temp.right != null) {
@@ -263,45 +245,33 @@ public class Rope {
             poids += temp.weight;
         }
         return poids;
-
-        //return this.toString().length();
-
     }
 
-    void storeNoeud(Node root, Vector<Node> nodes)
-    {
+    // On met toutes les feuilles dans une ArrayList de manière ordonnée.
+    void storeNoeud(Node root, ArrayList<Node> nodes) {   
         // cas de base
-        if (root == null)
+        if (root == null) {
             return;
+        }
 
-        // Store les noeuds dans l'ordre
+        // Store les feuilles dans l'ordre
         storeNoeud(root.left, nodes);
-        nodes.add(root);
+        if (root.data != null) nodes.add(root);
         storeNoeud(root.right, nodes);
     }
 
-    //on construit l'arbre de manière récursive
-    Node buildTreeUtil(Vector<Node> nodes, double start,
-                       double end)
-    {
-        // cas de base
-        if (start > end)
-            return null;
+    // On construit la rope de manière récursive.
+    Node buildBalandedRope(ArrayList<Node> nodes) {
 
-        //le noeud du milieu devient la racine
-        int mid = (int) Math.ceil((start + end) / 2);
-        Node node = nodes.get(mid);
-/*        if (node.data == null){
-            node.weight = 0;
-        } else {
-            node.weight=node.data.length();
-        }*/
+        Node temp = new Node();
+        double size = nodes.size();
 
-        //on construit les sous-arbres de gauche et de droite
-        node.left = buildTreeUtil(nodes, start, mid - 1);
-        node.right = buildTreeUtil(nodes, mid + 1, end);
-        node.weight=getWeight(node);
+        if (size == 1) return (nodes.get(0));
 
-        return node;
+        int leftSubtreeSize = (int) Math.ceil(size/2);
+        temp.left   = buildBalandedRope(new ArrayList<>(nodes.subList(0, leftSubtreeSize)));
+        temp.right  = buildBalandedRope(new ArrayList<>(nodes.subList(leftSubtreeSize, nodes.size())));
+        temp.weight = getWeight(temp);
+        return temp;
     }
 }
