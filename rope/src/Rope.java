@@ -211,10 +211,17 @@ public class Rope {
 
         Vector<Node> nodes = new Vector<>();
         storeNoeud(root, nodes);
+        //nodes.add(nodes.size(),new Node());
         int n = nodes.size();
 
+
+        for(Node obj : nodes)
+        {
+            System.out.println("Data: "+obj.data + " Weight: " + obj.weight);
+        }
+
         //on reconstruit l'arbre noeud par noeud
-        this.root=buildTreeUtil(nodes, 0, n - 1);
+        this.root=buildTreeUtil(nodes, 0, n-1);
 
     }
 
@@ -274,25 +281,26 @@ public class Rope {
     }
 
     //on construit l'arbre de manière récursive
-    Node buildTreeUtil(Vector<Node> nodes, int start,
-                       int end)
+    Node buildTreeUtil(Vector<Node> nodes, double start,
+                       double end)
     {
         // cas de base
         if (start > end)
             return null;
 
         //le noeud du milieu devient la racine
-        int mid = (start + end) / 2;
+        int mid = (int) Math.ceil((start + end) / 2);
         Node node = nodes.get(mid);
-        if (node.data == null){
+/*        if (node.data == null){
             node.weight = 0;
         } else {
             node.weight=node.data.length();
-        }
+        }*/
 
         //on construit les sous-arbres de gauche et de droite
         node.left = buildTreeUtil(nodes, start, mid - 1);
         node.right = buildTreeUtil(nodes, mid + 1, end);
+        node.weight=getWeight(node);
 
         return node;
     }

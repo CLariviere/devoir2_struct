@@ -294,13 +294,11 @@ public class Main {
 		try{
 			System.out.println("\nTest de rebalance");
 			Rope corde = new Rope();
-			String s = "Draggammalamalatha birbouchel Ostrumaplivi tigaudô umô transi Li";
+			String s = "Bonjour";
 			for(int i = 0; i < s.length(); ++i){
 				corde.insert(i, s.charAt(i)+"");
 			}
-			System.out.println("length " + corde.length() + " weigth " +corde.root.weight);
 			corde.rebalance();
-			System.out.println("length " + corde.length() + " weigth " +corde.root.weight);
 			testEqual(corde, s);
 		}catch (Exception e){
 			System.out.println(e.getMessage());
